@@ -41,5 +41,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.key }} 
           script: |
-            sudo docker run --name ${{ secrets.CONTAINER }} -d -p ${{ secrets.HOST_PORT }}:${{ secrets.CONTAINER_PORT }} ${{ secrets.CONTAINER }}
+            sudo docker run --name ${{ secrets.CONTAINER }} -d --restart always -p ${{ secrets.HOST_PORT }}:${{ secrets.CONTAINER_PORT }} ${{ secrets.CONTAINER }}
             echo "The project is running"

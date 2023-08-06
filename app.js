@@ -23,6 +23,7 @@ app.post("/", function (req, res) {
         // console.log(response.statusCode);
         response.on("data", function (data) {
             const weatherData = JSON.parse(data);
+            console.log(weatherData);
             const temp = weatherData.main.temp;
             const city = weatherData.name;
             const weatherIcon = weatherData.weather[0].icon;
