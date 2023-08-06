@@ -13,10 +13,11 @@ jobs:
           script: |
             cd ${{ secrets.DIRECTORY }}
             git pull
+            echo "Successfully pulled the project"
 
   build:
     needs: pull
-    name: Build the dependencies
+    name: Build the docker image
     runs-on: ubuntu-latest
     steps:
       - uses: appleboy/ssh-action@v1.0.0
@@ -27,6 +28,7 @@ jobs:
           script: |
             cd ${{ secrets.DIRECTORY }}
             sudo docker build -t ${{ secrets.CONTAINER }} .
+            echo "The docker image build is done."
     
   run:
     needs: build
@@ -40,4 +42,4 @@ jobs:
           key: ${{ secrets.key }} 
           script: |
             sudo docker run --name ${{ secrets.CONTAINER }} -d -p ${{ secrets.HOST_PORT }}:${{ secrets.CONTAINER_PORT }} ${{ secrets.CONTAINER }}
-
+            echo "The project is running"
