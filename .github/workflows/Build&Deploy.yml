@@ -1,0 +1,41 @@
+name: Build and deploy the project on github
+on: push
+jobs:
+  pull:
+    name: Pull the code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.key }} 
+          script: |
+            cd ${{ secrets.DIRECTORY }}
+            git pull
+
+  build:
+    name: Build the dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.key }} 
+          script: |
+            cd ${{ secrets.DIRECTORY }}
+            sudo docker build -t ${{ secrets.CONTAINER }}
+    
+  run:
+    name: Run the container
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.key }} 
+          script: |
+            sudo docker run --name ${{ secrets.CONTAINER }} -d -p ${{ secrets.HOST_PORT }}:${{ secrets.CONTAINER_PORT }} ${{ secrets.CONTAINER }}
+
